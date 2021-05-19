@@ -1,44 +1,48 @@
-from tkinter import *
-
-root = Tk()
-root.title("Entry Boxes")
-root.geometry('700x500')
-
-ask = Label(root , text = 'The total different number of frames').grid(row = 0, column = 0)
-
-e = Entry(root, width = 50)
-e.grid(row = 0, column = 1)
-
-
-def click():
-    widht_list = []
-    length_list = []
-    quantity_list = []
-
-    def c():
-        print(widht_list, length_list, quantity_list)
-
-
-
-    row = int(e.get())
-    b= Button(root, text = 'cc', command = c).grid(row = row + 2, column = 0)
-    for i in range(row):
-        width = Entry(root)
-        width.grid(row = i+2, column = 0)
-        widht_list.append(width.get())
-
-        length = Entry(root)
-        length.grid(row = i+2 , column = 1)
-        length_list.append(length.get())
-
-        quantity = Entry(root)
-        quantity.grid(row = i+2, column = 2)
-        quantity_list.append(quantity.get())
-    
-    
-
-
-button = Button(root , text = 'click me!', command = click)
-button.grid(row = 1, column = 0)
-
-root.mainloop()
+def firstFit(length, n, c):
+     
+    # Initialize result (Count of bins)
+    res = 0
+ 
+    # Create an array to store
+    # remaining space in bins
+    # there can be at most n bins
+    bin_rem = [0]*n
+ 
+    # Place items one by one
+    for i in range(n):
+         
+        # Find the first bin that
+        # can accommodate
+        # length[i]
+        j = 0
+         
+        # Initialize minimum space
+        # left and index
+        # of best bin
+        min = c + 1
+        bi = 0
+ 
+        for j in range(res):
+            if (bin_rem[j] >= length[i] and bin_rem[j] -
+                                       length[i] < min):
+                bi = j
+                min = bin_rem[j] - length[i]
+             
+        # If no bin could accommodate length[i],
+        # create a new bin
+        if (min == c + 1):
+            bin_rem[res] = c - length[i]
+            res += 1
+        else: # Assign the item to best bin
+            bin_rem[bi] -= length[i]
+    return res
+ 
+# Driver code
+if __name__ == '__main__':
+    length = [ 2, 5, 4, 7, 1, 3, 8 ]
+    c = 10
+    n = len(length)
+    print("Number of bins required in First Fit : ",
+                             firstFit(length, n, c))
+     
+# This code is contributed by Rajput-Ji
