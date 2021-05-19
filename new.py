@@ -4,13 +4,11 @@ import tkinter.messagebox
 
 
 class MainWindow:
-    def __init__(self, n , r , k):
+    def __init__(self, n):
         self.window = tkinter.Tk()
         self.window.wm_title("Insert data")
 
         self.n = n
-        self.r = r
-        self.k = k
         self.widthList = []
         self.lengthList = []
         self.quantityList = []
@@ -18,13 +16,11 @@ class MainWindow:
         self.addEntries(n)
         self.window.mainloop()
 
-        
+        tkinter.Button(self.window, width=20, text="Insert", command=self.submitEntries).grid(
+            pady=15, padx=5, column=1, row=1
+        )
 
     def addEntries(self, n):
-        tkinter.Label(self.window, text = "Lenth").grid(column = 1, row = 0)
-        tkinter.Label(self.window, text = "Width").grid(column = 2, row = 0)
-        tkinter.Label(self.window, text = "Quantity").grid(column = 3, row = 0)
-
         for i in range(n):
             width = tkinter.StringVar()
             length = tkinter.StringVar()
@@ -47,9 +43,9 @@ class MainWindow:
             )
             quantityEntry.grid(pady=5, column=3, row=i+2)
             self.quantityList.append(quantityEntry)
-        
-        tkinter.Button(self.window, width=20, text="Calculate", command=self.submitEntries()).grid(
-            pady=15, padx=5, column=1, row=i+3
+
+            tkinter.Button(self.window, width=20, text="Calculate", command=self.submitEntries).grid(
+            pady=15, padx=5, column=1, row=1
         )
 
     def submitEntries(self):
@@ -59,25 +55,26 @@ class MainWindow:
         quantityList = self.quantityList
         widths = []
         for width in widthList:
-            widths.append(int(width.get()))
+            widths.append(width.get())
 
         lengths = []
         for length in lengthList:
-            lengths.append(int(length.get()))
+            lengths.append(length.get())
 
         quantities = []
         for quantity in quantityList:
-            quantities.append(int(quantity.get()))
+            quantities.append(quantity.get())
+
         
         l =  len(widths)
         for j  in range(l):
-            for z in range(quantities[j]*2):
-                total.append(widths[j])
-                total.append(lengths[j])
-        # print(total)
+            for z in range(int(quantities[j]*2)):
+                total.append(int(widths[j]))
+                total.append(int(lengths[j]))
 
         res = 0
         n = len(total)
+        r = 5000
     
         # Create an array to store
         # remaining space in bins
@@ -96,7 +93,7 @@ class MainWindow:
             # Initialize minimum space
             # left and index
             # of best bin
-            min = self.r + 1
+            min = r + 1
             bi = 0
     
             for jay in range(res):
@@ -107,50 +104,33 @@ class MainWindow:
                 
             # If no bin could accommodate total[ai],
             # create a new bin
-            if (min == self.r + 1):
-                bin_rem[res] = self.r - total[ai]
+            if (min == r + 1):
+                bin_rem[res] = r - total[ai]
                 res += 1
             else: # Assign the item to best bin
                 bin_rem[bi] -= total[ai]
 
         tkinter.Label( self.window, text = ("The total number of bar would require:",res)).grid(column = 1, row = l+3)
 
-        
 class HomePage:
     def __init__(self):
         self.window = tkinter.Tk()
         self.window.wm_title("BRILLMAX")
 
-        tkinter.Label(self.window, text="Number of different frames: ", width=25).grid(
+        tkinter.Label(self.window, text="Number of different frames", width=25).grid(
             pady=5, column=1, row=1
         )
-        tkinter.Label(self.window, text="The length of the raw material: ", width=25).grid(
-            pady=5, column=1, row=2
-        )
-        tkinter.Label(self.window, text="The kerf size: ", width=25).grid(
-            pady=5, column=1, row=3
-        )
-
         self.nEntry = tkinter.Entry(self.window, width=25)
         self.nEntry.grid(pady=5, column=2, row=1)
-
-        self.rEntry = tkinter.Entry(self.window, width=25)
-        self.rEntry.grid(pady=5, column=2, row=2)
-
-        self.kEntry = tkinter.Entry(self.window, width=25)
-        self.kEntry.grid(pady=5, column=2, row=3)
-        
         tkinter.Button(self.window, width=20, text="Insert", command=self.calculate).grid(
-             padx=5, column=3, row=3
+            pady=15, padx=5, column=3, row=1
         )
 
         self.window.mainloop()
 
     def calculate(self):
         self.n = int(self.nEntry.get())
-        self.r = int(self.rEntry.get())
-        self.k = int(self.kEntry.get())
-        self.mainWindow = MainWindow(self.n,self.r,self.k)
+        self.mainWindow = MainWindow(self.n)
 
 
 homePage = HomePage()
